@@ -19,34 +19,78 @@ use Prado\Web\THttpHeaderName;
 /**
  * TRpcClient class
  *
- * Base class for RPC clients. Subclasses implement protocol-specific encoding and decoding.
+ * TRpcClient is the base class for consuming a remote RPC server. It encodes a
+ * method call, sends it as an HTTP POST through the PRADO HTTP client, and
+ * decodes the response. Two protocols are provided by the subclasses
+ * {@see TJsonRpcClient} (JSON-RPC 1.0 and 2.0) and {@see TXmlRpcClient} (XML-RPC).
  *
- * Note: When using setIsNotification(true), *every* following request is also
- * considered to be a notification until you use setIsNotification(false).
+ * ## Calling remote methods
  *
- * Usage:
+ * Remote methods are invoked as native PHP method calls. The base class routes
+ * an unknown method through `__call` in each subclass, which encodes the name
+ * and arguments, performs the request, and returns the decoded result.
  *
- * First, you can use the factory:
- * <pre>
- * $_rpcClient = TRpcClient::create('xml', 'http://host/server');
- * $_result = $_rpcClient->remoteMethodName($param, $otherParam);
- * </pre>
+ * ```php
+ * use Prado\IO\Rpc\TRpcClient;
  *
- * or as oneliner:
- * <pre>
- * $_result = TRpcClient::create('json', 'http://host/server')->remoteMethod($param, ...);
- * </pre>
+ * // Factory: 'json' or 'xml' selects the protocol subclass.
+ * $client = TRpcClient::create('json', 'https://api.example.com/rpc');
  *
- * Second, you can also use the specific implementation directly:
- * <pre>
- * $_rpcClient = new TXmlRpcClient('http://host/server');
- * $_result = $_rpcClient->remoteMethod($param, ...);
- * </pre>
+ * $sum  = $client->add(2, 3);                 // POST {"method":"add","params":[2,3],...}
+ * $user = $client->getUser(42);               // decoded result (array, scalar, etc.)
  *
- * or as oneliner:
- * <pre>
- * $_result = TXmlRpcClient('http://host/server')->hello();
- * </pre>
+ * // One-liner.
+ * $pong = TRpcClient::create('xml', 'https://api.example.com/rpc')->ping();
+ *
+ * // A concrete subclass may be constructed directly.
+ * $client = new \Prado\IO\Rpc\TXmlRpcClient('https://api.example.com/rpc');
+ * ```
+ *
+ * ## Notifications
+ *
+ * A notification is a call whose response is ignored. Enable it with
+ * {@see setIsNotification() IsNotification}; the next and every following call
+ * returns `true` without decoding a response, until the flag is set back to
+ * `false`.
+ *
+ * ```php
+ * $client->setIsNotification(true);
+ * $client->logEvent('user.login', $userId);   // returns true, response discarded
+ * $client->setIsNotification(false);
+ * ```
+ *
+ * ## Transport
+ *
+ * The transport is a {@see \Prado\IO\HttpClient\THttpClient}, created on first
+ * use by {@see getDownloader()}. Replace it with {@see setDownloader()} to set
+ * timeouts, add headers, or wrap it in {@see \Prado\IO\HttpClient\TCachedHttpClient}
+ * for response caching.
+ *
+ * ```php
+ * $transport = \Prado\IO\HttpClient\THttpClient::create();
+ * $transport->setTimeout(5);
+ * $client->setDownloader($transport);
+ * ```
+ *
+ * ## Error handling
+ *
+ * | Condition | Exception |
+ * |---|---|
+ * | Connection failure, timeout, or non-2xx HTTP status | {@see TRpcClientRequestException} |
+ * | Server fault, or an empty or unparseable response | {@see TRpcClientResponseException} |
+ *
+ * ```php
+ * use Prado\IO\Rpc\TRpcClientRequestException;
+ * use Prado\IO\Rpc\TRpcClientResponseException;
+ *
+ * try {
+ *     $result = $client->getUser(42);
+ * } catch (TRpcClientResponseException $e) {
+ *     // $e->getMessage() is the fault string; $e->getErrorCode() the fault code.
+ * } catch (TRpcClientRequestException $e) {
+ *     // transport-level failure; the server was not reached or returned non-2xx.
+ * }
+ * ```
  *
  * @author Robin J. Rogge <rrogge@bigpoint.net>
  * @since 1.0.0

@@ -18,8 +18,18 @@ use SimpleXMLElement;
 /**
  * TXmlRpcCodec class
  *
- * Pure-PHP encoder and decoder for the XML-RPC wire format. Eliminates the
- * dependency on the PECL `xmlrpc` extension.
+ * Pure-PHP encoder and decoder for the XML-RPC wire format, built on `ext-dom`
+ * and `ext-simplexml`.
+ *
+ * ## Why this codec exists
+ *
+ * PHP's bundled `xmlrpc` extension was removed from the PHP core in PHP 8.0 and
+ * moved to PECL, where it is unmaintained and unavailable on most PHP 8 builds.
+ * The functions `xmlrpc_encode_request()` and `xmlrpc_decode()` are therefore
+ * absent in a default PHP 8 installation. TXmlRpcCodec replaces them with a
+ * dependency-free implementation, so XML-RPC works on stock PHP 8.1+ without any
+ * PECL extension. {@see TXmlRpcClient} and {@see \Prado\Web\Services\TXmlRpcProtocol}
+ * use it for all XML-RPC encoding and decoding.
  *
  * ## Encoding — PHP → XML-RPC type mapping
  *
