@@ -10,22 +10,9 @@ jobs:
       matrix:
         php-versions: ['8.1', '8.2', '8.3']
 
-    defaults:
-      run:
-        working-directory: prado-rpc
-
     steps:
       - name: Checkout extension
         uses: actions/checkout@v4
-        with:
-          path: prado-rpc
-
-      - name: Checkout PRADO framework (4.4 dev)
-        uses: actions/checkout@v4
-        with:
-          repository: pradosoft/prado
-          ref: master
-          path: prado
 
       - name: Setup PHP, with composer and extensions
         uses: shivammathur/setup-php@v2
@@ -34,8 +21,8 @@ jobs:
           extensions: ctype, dom, intl, json, mbstring, pcre, simplexml, spl, zlib
           tools: php-cs-fixer, phpstan, cs2pr
 
-      - name: Validate composer.json and composer.lock
-        run: composer validate --strict
+      - name: Validate composer.json
+        run: composer validate
 
       - name: Validate code syntax using php-cs-fixer
         run: php-cs-fixer fix -vvv --dry-run --using-cache=no --format=checkstyle | cs2pr
@@ -48,9 +35,11 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
           restore-keys: ${{ runner.os }}-composer-
 
+      # The framework is pulled from its git repository (the VCS repository in
+      # composer.json) as dev-master until PRADO 4.4 is published to Packagist.
       - name: Install Composer dependencies
         run: composer install --no-progress --prefer-dist --optimize-autoloader
 
