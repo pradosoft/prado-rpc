@@ -1,0 +1,73 @@
+{
+	"name": "pradosoft/prado-rpc",
+	"type": "prado4-extension",
+	"description": "JSON-RPC and XML-RPC for the PRADO PHP framework. Provides the TRpcService web service exposing API providers over JSON-RPC 1.0/2.0 and XML-RPC, plus the matching RPC clients built on the PRADO HTTP client.",
+	"keywords": [ "prado", "framework", "rpc", "json-rpc", "jsonrpc", "xml-rpc", "xmlrpc", "extension"],
+	"homepage": "https://github.com/pradosoft/prado-rpc",
+	"license": "BSD-3-Clause",
+	"authors": [
+		{
+			"name": "Robin J. Rogge",
+			"email": "rrogge@bigpoint.net",
+			"role": "Developer"
+		},
+		{
+			"name": "Fabio Bas",
+			"email": "ctrlaltca@gmail.com",
+			"role": "Developer"
+		},
+		{
+			"name": "Brad Anderson",
+			"email": "belisoful@icloud.com",
+			"role": "Developer",
+			"homepage": "https://github.com/belisoful"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"Prado\\": "src"
+		}
+	},
+	"repositories": [
+		{
+			"type": "composer",
+			"url": "https://asset-packagist.org"
+		},
+		{
+			"type": "vcs",
+			"url": "https://github.com/pradosoft/prado",
+			"no-api": true
+		}
+	],
+	"minimum-stability": "dev",
+	"prefer-stable": true,
+	"require": {
+		"php": ">=8.1.0",
+		"ext-simplexml": "*",
+		"ext-dom": "*"
+	},
+	"require-dev" : {
+		"pradosoft/prado" : "dev-master",
+		"phpunit/phpunit" : "^10",
+		"phpdocumentor/shim": "^3",
+		"friendsofphp/php-cs-fixer": "^3.94",
+		"phpstan/phpstan": "^2.1"
+	},
+	"config": {
+		"platform": {
+			"php": "8.1"
+		},
+		"allow-plugins": {
+			"phpdocumentor/shim": true
+		}
+	},
+	"scripts": {
+		"unittest": "vendor/bin/phpunit --testsuite unit"
+	},
+	"extra": {
+		"prado": {
+			"error-messages": "config/messages.txt",
+			"class-map": ["config/classes.json"]
+		}
+	}
+}
