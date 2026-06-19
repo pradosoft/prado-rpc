@@ -12,6 +12,7 @@ namespace Prado\IO\Rpc;
 use Prado\Exceptions\TApplicationException;
 use Prado\IO\HttpClient\THttpClient;
 use Prado\IO\HttpClient\THttpClientException;
+use Prado\Prado;
 use Prado\TPropertyValue;
 use Prado\Web\THttpHeaderName;
 
@@ -99,7 +100,7 @@ class TRpcClient extends \Prado\TApplicationComponent
 			default => throw new TApplicationException('rpcclient_unsupported_handler', (string) $type),
 		};
 
-		return new $handler($serverUrl, $isNotification);
+		return Prado::createComponent($handler, $serverUrl, $isNotification);
 	}
 
 	/**

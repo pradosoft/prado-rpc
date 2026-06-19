@@ -10,6 +10,7 @@
 namespace Prado\IO\Rpc;
 
 use Prado\Exceptions\TInvalidDataValueException;
+use Prado\Prado;
 use Prado\Web\Javascripts\TJavaScript;
 use Prado\Web\TMediaType;
 
@@ -128,7 +129,7 @@ class TJsonRpcClient extends TRpcClient
 	 */
 	public static function create($type, $serverUrl, $isNotification = false): static
 	{
-		return new static($serverUrl, $isNotification);
+		return Prado::createComponent(static::class, $serverUrl, $isNotification);
 	}
 
 	// getter/setter

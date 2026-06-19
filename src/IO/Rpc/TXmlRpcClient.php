@@ -9,6 +9,7 @@
 
 namespace Prado\IO\Rpc;
 
+use Prado\Prado;
 use Prado\Web\TMediaType;
 
 /**
@@ -83,6 +84,6 @@ class TXmlRpcClient extends TRpcClient
 	 */
 	public static function create($type, $serverUrl, $isNotification = false): static
 	{
-		return new static($serverUrl, $isNotification);
+		return Prado::createComponent(static::class, $serverUrl, $isNotification);
 	}
 }
