@@ -1,0 +1,17 @@
+{
+	"TRpcClient": "Prado\\IO\\Rpc\\TRpcClient",
+	"TJsonRpcClient": "Prado\\IO\\Rpc\\TJsonRpcClient",
+	"TXmlRpcClient": "Prado\\IO\\Rpc\\TXmlRpcClient",
+	"TXmlRpcCodec": "Prado\\IO\\Rpc\\TXmlRpcCodec",
+	"TXmlRpcBase64": "Prado\\IO\\Rpc\\TXmlRpcBase64",
+	"TRpcClientRequestException": "Prado\\IO\\Rpc\\TRpcClientRequestException",
+	"TRpcClientResponseException": "Prado\\IO\\Rpc\\TRpcClientResponseException",
+
+	"TRpcService": "Prado\\Web\\Services\\TRpcService",
+	"TRpcServer": "Prado\\Web\\Services\\TRpcServer",
+	"TRpcProtocol": "Prado\\Web\\Services\\TRpcProtocol",
+	"TJsonRpcProtocol": "Prado\\Web\\Services\\TJsonRpcProtocol",
+	"TXmlRpcProtocol": "Prado\\Web\\Services\\TXmlRpcProtocol",
+	"TRpcApiProvider": "Prado\\Web\\Services\\TRpcApiProvider",
+	"TRpcException": "Prado\\Web\\Services\\TRpcException"
+}
