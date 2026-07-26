@@ -4,7 +4,7 @@
  * @author Robin J. Rogge <rrogge@bigpoint.net>
  * @link https://github.com/pradosoft/prado-rpc
  * @license https://github.com/pradosoft/prado/blob/master/LICENSE
- * @since 1.0.0
+ * @since 3.2.0
  */
 
 namespace Prado\Web\Services;
@@ -17,7 +17,7 @@ namespace Prado\Web\Services;
  * {@see \Prado\Web\Services\TXmlRpcProtocol} (XML-RPC) extend this class.
  *
  * @author Robin J. Rogge <rrogge@bigpoint.net>
- * @since 1.0.0
+ * @since 3.2.0
  **/
 abstract class TRpcProtocol
 {

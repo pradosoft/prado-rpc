@@ -4,7 +4,7 @@ This file provides guidance to Agents when working with code in this repository.
 
 ## What This Is
 
-**prado-rpc** is a PRADO 4 extension that adds **JSON-RPC** (1.0/2.0) and **XML-RPC** to the [PRADO framework](https://github.com/pradosoft/prado), as both a server-side web service and client classes. All source lives under `src/` (PSR-4 namespace `Prado\`, split between `Prado\Web\Services` for the server side and `Prado\IO\Rpc` for the client side). Tests mirror that under `tests/unit/`. Current version: **1.0.0**.
+**prado-rpc** is a PRADO 4 extension that adds **JSON-RPC** (1.0/2.0) and **XML-RPC** to the [PRADO framework](https://github.com/pradosoft/prado), as both a server-side web service and client classes. All source lives under `src/` (PSR-4 namespace `Prado\`, split between `Prado\Web\Services` for the server side and `Prado\IO\Rpc` for the client side). Tests mirror that under `tests/unit/`. Current version: **4.4.0** — the package version tracks the PRADO framework `main` dev branch version (currently 4.4.0), not an independent 1.x line.
 
 The classes originated in the PRADO framework (since PRADO 3.2) and were extracted for PRADO 4.4. The namespaces are unchanged so existing applications keep working when the package is installed.
 
@@ -83,7 +83,7 @@ Remote methods are invoked through `__call`, so a client call reads like a nativ
 - **Error codes** are `rpc*` keys in `config/messages.txt`. The framework `messages.txt` is not used. New codes describe the failure; `{0}`, `{1}` are positional parameters.
 - **cs-fixer = tabs** (`@PSR12` + `setIndent("\t")`). If cs-fixer suddenly wants to convert tabs → spaces across *every* file, `.php-cs-fixer.dist.php` has been clobbered by a php-cs-fixer scaffold (the `@auto` default); restore the tab-based config (it matches the sibling extensions).
 - **`if` statements** always use a block (`{}`), never a single-line body.
-- **`@since`** uses the current version (`1.0.0`) for new classes/methods; omit the method tag when it matches the class tag.
+- **`@since`** records the version that introduced the class or method: the twelve classes extracted from the framework carry `@since 3.2.0` (verified against the framework git history — added 2010-03-27 in commit `25da68e7`, first released in PRADO 3.2.0, and tagged `@since 3.2` in the framework docblocks); `TXmlRpcCodec` and `TXmlRpcBase64` are new in this package and carry `@since 4.4.0`. New classes/methods use the current version (`4.4.0`); omit the method tag when it matches the class tag. The version tracks the PRADO framework `main` dev branch (see "What This Is").
 - **Backward compatibility** — all changes must be backward compatible within a point release. The public API (class names, namespaces, method signatures) matches what shipped in the PRADO framework; applications migrating to the package must not need code changes.
 - Method docblocks are **tight** and carry at least one descriptive sentence (not only `@param`/`@return`).
 

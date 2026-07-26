@@ -6,7 +6,7 @@
  * @author Brad Anderson <belisoful@icloud.com>
  * @link https://github.com/pradosoft/prado-rpc
  * @license https://github.com/pradosoft/prado/blob/master/LICENSE
- * @since 1.0.0
+ * @since 4.4.0
  */
 
 namespace Prado\IO\Rpc;
@@ -22,7 +22,7 @@ namespace Prado\IO\Rpc;
  * $client->upload(new TXmlRpcBase64(file_get_contents('/path/to/file.bin')));
  * ```
  *
- * @since 1.0.0
+ * @since 4.4.0
  */
 final class TXmlRpcBase64
 {

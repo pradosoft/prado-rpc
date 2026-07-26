@@ -4,7 +4,7 @@
  * @author Robin J. Rogge <rrogge@bigpoint.net>
  * @link https://github.com/pradosoft/prado-rpc
  * @license https://github.com/pradosoft/prado/blob/master/LICENSE
- * @since 1.0.0
+ * @since 3.2.0
  */
 
 namespace Prado\Web\Services;
@@ -20,7 +20,7 @@ use Prado\Web\TMediaType;
  * Uses the pure-PHP {@see TXmlRpcCodec} in place of the removed PECL `xmlrpc` extension.
  *
  * @author Robin J. Rogge <rrogge@bigpoint.net>
- * @since 1.0.0
+ * @since 3.2.0
  */
 class TXmlRpcProtocol extends TRpcProtocol
 {

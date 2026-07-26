@@ -4,7 +4,7 @@
  * @author Robin J. Rogge <rrogge@bigpoint.net>
  * @link https://github.com/pradosoft/prado-rpc
  * @license https://github.com/pradosoft/prado/blob/master/LICENSE
- * @since 1.0.0
+ * @since 3.2.0
  */
 
 namespace Prado\IO\Rpc;
@@ -19,7 +19,7 @@ use Prado\Exceptions\TApplicationException;
  * non-2xx HTTP status.
  *
  * @author Robin J. Rogge <rrogge@bigpoint.net>
- * @since 1.0.0
+ * @since 3.2.0
  */
 class TRpcClientRequestException extends TApplicationException
 {

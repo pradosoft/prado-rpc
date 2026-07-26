@@ -4,7 +4,7 @@
  * @author Robin J. Rogge <rrogge@bigpoint.net>
  * @link https://github.com/pradosoft/prado-rpc
  * @license https://github.com/pradosoft/prado/blob/master/LICENSE
- * @since 1.0.0
+ * @since 3.2.0
  */
 
 namespace Prado\Web\Services;
@@ -34,7 +34,7 @@ namespace Prado\Web\Services;
  * {@see TRpcService}'s documentation.
  *
  * @author Robin J. Rogge <rrogge@bigpoint.net>
- * @since 1.0.0
+ * @since 3.2.0
  */
 abstract class TRpcApiProvider extends \Prado\TModule
 {

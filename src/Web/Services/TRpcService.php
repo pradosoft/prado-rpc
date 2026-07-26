@@ -4,7 +4,7 @@
  * @author Robin J. Rogge <rrogge@bigpoint.net>
  * @link https://github.com/pradosoft/prado-rpc
  * @license https://github.com/pradosoft/prado/blob/master/LICENSE
- * @since 1.0.0
+ * @since 3.2.0
  */
 
 namespace Prado\Web\Services;
@@ -60,7 +60,7 @@ use Prado\Xml\TXmlElement;
  * namespace format. On match, the class is instantiated to handle the request.
  *
  * @author Robin J. Rogge <rrogge@bigpoint.net>
- * @since 1.0.0
+ * @since 3.2.0
  **/
 class TRpcService extends \Prado\TService
 {

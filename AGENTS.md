@@ -31,7 +31,7 @@
 ### Documentation Standards
 - Every public method has a PHPDoc block with `@param`/`@return`/`@throws` as applicable, plus at least one descriptive sentence.
 - Classes have a clear top docblock (what/why/how, an example where useful) with `@author` and `@since`.
-- `@since` uses the current version (`1.0.0`).
+- `@since` records the version that introduced the class or method: classes extracted from the framework carry `@since 3.2.0` (per the framework git history; the framework docblocks said `@since 3.2`), classes new to this package carry `@since 4.4.0`. New code uses the current version (`4.4.0`). The package version tracks the PRADO framework `main` dev branch version (currently 4.4.0), not an independent 1.x line.
 
 ### Compatibility
 - The public API (class names, namespaces, signatures) matches what shipped in the PRADO framework; applications migrating from framework-bundled RPC to this package must not need code changes.

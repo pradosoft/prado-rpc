@@ -1,6 +1,6 @@
 # Migration guide
 
-The RPC classes shipped inside the PRADO framework (since PRADO 3.2). PRADO 4.4 extracts them into this package. The class names and namespaces are unchanged, so most applications need only add the dependency.
+The RPC classes shipped inside the PRADO framework (added 2010-03-27, first released in PRADO 3.2.0). PRADO 4.4 extracts them into this package. The class names and namespaces are unchanged, so most applications need only add the dependency.
 
 ## Install the package
 
@@ -43,6 +43,10 @@ Code that referenced the short class names through Prado's class map (for exampl
 ### XML-RPC no longer needs the `xmlrpc` extension
 
 XML-RPC encoding and decoding run through the pure-PHP `TXmlRpcCodec`. The PECL `xmlrpc` extension (removed from PHP core in 8.0) is no longer required. See the [codec guide](xml-rpc-codec.md).
+
+### `TRpcClientTypesEnumerable` removed
+
+The framework's `Prado\Util\TRpcClientTypesEnumerable` (the enumerable of client type keys) was not carried over. `TRpcClient::create()` validates the type string (`'json'`, `'xml'`) directly and throws a `TApplicationException` for any other value.
 
 ### Request and response exceptions
 

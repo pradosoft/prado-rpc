@@ -6,7 +6,7 @@
  * @author Brad Anderson <belisoful@icloud.com>
  * @link https://github.com/pradosoft/prado-rpc
  * @license https://github.com/pradosoft/prado/blob/master/LICENSE
- * @since 1.0.0
+ * @since 4.4.0
  */
 
 namespace Prado\IO\Rpc;
@@ -60,7 +60,7 @@ use SimpleXMLElement;
  * | `<struct>` | `array` (associative) |
  *
  * @internal Used by {@see TXmlRpcClient} and {@see \Prado\Web\Services\TXmlRpcProtocol}.
- * @since 1.0.0
+ * @since 4.4.0
  */
 final class TXmlRpcCodec
 {

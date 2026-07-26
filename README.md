@@ -1,42 +1,36 @@
 # PRADO RPC Extension
 
-JSON-RPC and XML-RPC for the [PRADO PHP Framework](https://github.com/pradosoft/prado) (version 4.4+), as both a server-side web service and client classes.
+[![Tests](https://github.com/pradosoft/prado-rpc/actions/workflows/prado-rpc.yml/badge.svg)](https://github.com/pradosoft/prado-rpc/actions/workflows/prado-rpc.yml)
+[![License](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)](LICENSE)
 
-The server side is `TRpcService`, a PRADO service that routes incoming HTTP POST requests to API providers over JSON-RPC 1.0/2.0 (`application/json`) or XML-RPC (`text/xml`). The client side is `TRpcClient` and its protocol subclasses, built on the PRADO HTTP client (`Prado\IO\HttpClient`), so the transport is pluggable and cacheable.
+This package adds JSON-RPC and XML-RPC support to the [PRADO PHP Framework](https://github.com/pradosoft/prado) (4.4 and up), and it covers both sides of the conversation: a service you plug into your application to expose an API, and client classes for calling RPC servers from PHP.
+
+On the server, `TRpcService` takes incoming HTTP POST requests and routes them to your API providers, speaking JSON-RPC 1.0/2.0 (`application/json`) or XML-RPC (`text/xml`) depending on the request's Content-Type. On the client, `TRpcClient` and its subclasses ride on the PRADO HTTP client (`Prado\IO\HttpClient`), so you can swap the transport or add caching without touching your calling code.
 
 ## Documentation
 
-Full guides live in [`docs/`](docs/README.md):
+The full guides live in [`docs/`](docs/README.md):
 
-| Guide | Contents |
-|---|---|
-| [Server](docs/server.md) | Exposing an API with `TRpcService` and `TRpcApiProvider`; configuration, routing, faults, custom servers |
-| [Client](docs/client.md) | Calling a remote server with `TRpcClient`; factory, versions, notifications, transport, error handling |
-| [XML-RPC codec](docs/xml-rpc-codec.md) | The pure-PHP `TXmlRpcCodec` that replaces PHP's removed `xmlrpc` extension; type mapping, base64, dates |
-| [Migration](docs/migration.md) | Moving from the framework-bundled RPC classes to this package |
+- **[Server](docs/server.md)** — exposing an API with `TRpcService` and `TRpcApiProvider`: configuration, routing, faults, custom servers
+- **[Client](docs/client.md)** — calling a remote server with `TRpcClient`: the factory, protocol versions, notifications, transport, error handling
+- **[XML-RPC codec](docs/xml-rpc-codec.md)** — the pure-PHP `TXmlRpcCodec` that stands in for PHP's removed `xmlrpc` extension: type mapping, base64, dates
+- **[Migration](docs/migration.md)** — moving from the framework-bundled RPC classes to this package
 
-Contributor working-memory notes for each class are under [`agents/`](agents/INDEX.md).
+If you're contributing, the per-class working notes under [`agents/`](agents/INDEX.md) are a good map of the internals.
 
 ## Requirements
 
-| Requirement | Scope | Purpose |
-|---|---|---|
-| PHP 8.1 or higher | required | — |
-| `ext-simplexml` | required | XML-RPC encoding/decoding (`TXmlRpcCodec`) |
-| `ext-dom` | required | XML request parsing |
-| PRADO Framework `^4.4` | dev | `TService`, `TModule`, `TComponent`, the IO/HttpClient layer |
+You'll need PHP 8.1 or newer with the `simplexml` and `dom` extensions — both are part of stock PHP builds. The XML-RPC codec uses `simplexml` for decoding, and `dom` handles XML request parsing. The package runs inside a PRADO 4.4+ application, which supplies the framework itself; `pradosoft/prado` is only a dev dependency of this package.
 
 ## Installation
 
 ### Into a PRADO application
 
-Add the package to an existing PRADO 4.4+ application:
-
 ```sh
 composer require pradosoft/prado-rpc
 ```
 
-PRADO reads the package's `extra.prado` section and registers its class map and error messages system-wide. No bootstrap module and no configuration change are required, and existing `class="TRpcService"` service definitions keep working. Declare a service to start serving (see the [server guide](docs/server.md)):
+That's the whole install. PRADO reads the package's `extra.prado` section and registers its class map and error messages automatically — no bootstrap module, no configuration changes, and any existing `class="TRpcService"` service definitions keep working. To start serving, declare the service (details in the [server guide](docs/server.md)):
 
 ```xml
 <service id="rpc" class="Prado\Web\Services\TRpcService">
@@ -44,9 +38,7 @@ PRADO reads the package's `extra.prado` section and registers its class map and 
 </service>
 ```
 
-The application supplies the framework, so `pradosoft/prado` is not a runtime dependency of this package. The client classes use the framework's `Prado\IO\HttpClient` layer, which is part of PRADO 4.4; the application must run 4.4 or newer.
-
-> **If PRADO 4.4 is not yet released** on Packagist, resolve the framework from source until it ships. In the application's `composer.json`, allow dev stability and require `pradosoft/prado` as `dev-master`:
+> **Until PRADO 4.4 reaches Packagist**, you'll need to pull the framework from source. In your application's `composer.json`, allow dev stability and require `pradosoft/prado` as `dev-master`:
 >
 > ```json
 > "minimum-stability": "dev",
@@ -56,15 +48,15 @@ The application supplies the framework, so `pradosoft/prado` is not a runtime de
 > ],
 > "require": {
 >     "pradosoft/prado": "dev-master",
->     "pradosoft/prado-rpc": "^1.0"
+>     "pradosoft/prado-rpc": "^4.4"
 > }
 > ```
 >
-> Once 4.4 is published, drop this block and the plain `composer require` above resolves it normally.
+> Once 4.4 is published, delete this block and the plain `composer require` above will do the right thing.
 
-### Into a PRADO development repository
+### For development
 
-To develop the extension or run its test suite, clone the repository and install. No local framework checkout is required: `composer.json` declares a VCS repository for the framework, so `composer install` pulls `pradosoft/prado` (`dev-master`) directly from git along with the dev tools.
+To hack on the extension itself or run its test suite:
 
 ```sh
 git clone https://github.com/pradosoft/prado-rpc.git
@@ -72,9 +64,9 @@ cd prado-rpc
 composer install
 ```
 
-The `asset-packagist.org` repository declared in `composer.json` supplies the framework's bower asset dependencies. Because PRADO 4.4 is not yet on Packagist, the framework is required as `dev-master` under `"minimum-stability": "dev"` (with `"prefer-stable": true`, so every other dependency still resolves to a stable release). Once 4.4 ships, change the constraint to `^4.4` and drop the VCS repository and the stability flags.
+There's nothing else to set up. `composer.json` points at the framework's git repository, so `composer install` fetches `pradosoft/prado` (`dev-master`) straight from GitHub along with the dev tools — no local framework checkout needed. The `asset-packagist.org` entry covers the framework's bower assets, and `"prefer-stable": true` keeps every other dependency on stable releases despite the dev-stability floor. When 4.4 ships, the constraint becomes `^4.4` and the VCS repository and stability flags go away.
 
-Verify the install with the full check chain:
+Then check that everything works:
 
 ```sh
 composer unittest                                    # unit tests
@@ -82,9 +74,11 @@ vendor/bin/php-cs-fixer fix --dry-run src/           # code style
 vendor/bin/phpstan analyse src/ --memory-limit=512M  # static analysis
 ```
 
-## Server: exposing an API
+CI ([`.github/workflows/prado-rpc.yml`](.github/workflows/prado-rpc.yml)) runs those same checks on PHP 8.1, 8.2, and 8.3 for every push and pull request. Code style is PSR-12 with tabs, enforced by `.php-cs-fixer.dist.php`.
 
-Declare the service and its API providers, then write a provider that returns a method registry. See the [server guide](docs/server.md) for configuration forms, fault handling, and custom servers.
+## Serving an API
+
+Two steps: declare the service with its API providers, then write a provider that says which methods it exposes.
 
 ```xml
 <service id="rpc" class="Prado\Web\Services\TRpcService">
@@ -112,26 +106,35 @@ class CustomersApi extends TRpcApiProvider
 }
 ```
 
-Request flow: `TRpcService → TRpcServer → TRpcProtocol → TRpcApiProvider`. The protocol is selected by the request `Content-Type`: `application/json` dispatches to `TJsonRpcProtocol` (JSON-RPC 1.0 and 2.0), `text/xml` to `TXmlRpcProtocol` (XML-RPC).
+A request arrives at `TRpcService`, which hands it to a `TRpcServer`, which asks the protocol to decode it and dispatch to your provider. The protocol is chosen by the request's Content-Type: `application/json` gets `TJsonRpcProtocol` (JSON-RPC 1.0 and 2.0), `text/xml` gets `TXmlRpcProtocol` (XML-RPC). The [server guide](docs/server.md) covers the configuration variants, fault handling, and custom servers.
 
-## Client: calling an RPC server
+## Calling an RPC server
 
-The factory selects the protocol; an unknown method call becomes an RPC request through `__call`. See the [client guide](docs/client.md) for versions, notifications, transport, and error handling.
+Create a client and call methods on it as if they were local — unknown method calls become RPC requests through `__call`:
 
 ```php
 use Prado\IO\Rpc\TRpcClient;
 
 $client = TRpcClient::create('json', 'https://host/rpc');
 
-$customer = $client->getCustomer(42);          // request → decoded result
+$customer = $client->getCustomer(42);
 $orders   = $client->listOrders($customer['id']);
 ```
 
-Transport failures throw `TRpcClientRequestException`; server faults and malformed responses throw `TRpcClientResponseException`. The HTTP transport is replaceable through `setDownloader()` with any `Prado\IO\HttpClient\THttpClient`, including the caching wrapper.
+Pass `'json'` or `'xml'` to `create()` to pick the protocol; anything else throws a `TApplicationException`. The JSON client speaks JSON-RPC 2.0 out of the box, and `setVersion('1.0')` switches it to 1.0 if you need that.
+
+```php
+$client = TRpcClient::create('xml', 'https://host/rpc');        // XML-RPC
+$notify = TRpcClient::create('json', 'https://host/rpc', true); // notification mode
+```
+
+A client in notification mode fires requests and ignores the responses. JSON-RPC 2.0 notifications omit the `id` member entirely; 1.0 sends `"id": null`.
+
+When things go wrong you get one of two exceptions: `TRpcClientRequestException` for transport failures (connection errors, non-2xx responses) and `TRpcClientResponseException` for server faults or responses that won't parse. And if the default HTTP transport doesn't suit you, `setDownloader()` accepts any `Prado\IO\HttpClient\THttpClient`, including the caching wrapper. More in the [client guide](docs/client.md).
 
 ## XML-RPC on PHP 8
 
-PHP's bundled `xmlrpc` extension was removed from the core in PHP 8.0 and is unavailable on most PHP 8 builds. This package ships `Prado\IO\Rpc\TXmlRpcCodec`, a pure-PHP encoder/decoder built on `ext-dom` and `ext-simplexml`, so XML-RPC works on stock PHP 8.1+ with no PECL extension. See the [codec guide](docs/xml-rpc-codec.md).
+PHP dropped the bundled `xmlrpc` extension in 8.0, which left XML-RPC users hunting for a PECL build. This package sidesteps the problem: `TXmlRpcCodec` is a pure-PHP encoder/decoder built on `ext-dom` and `ext-simplexml`, so XML-RPC works on stock PHP 8.1+ with nothing extra to install. The [codec guide](docs/xml-rpc-codec.md) documents the type mapping, base64 handling, and dates.
 
 ## Classes
 
@@ -154,7 +157,7 @@ PHP's bundled `xmlrpc` extension was removed from the core in PHP 8.0 and is una
 
 ## Class resolution and error messages
 
-The package declares its integration points in `composer.json` under `extra.prado`, which PRADO's `TApplicationConfiguration` reads from every installed extension:
+The package tells PRADO about itself through the `extra.prado` section of `composer.json`, which the framework's `TApplicationConfiguration` reads from every installed extension:
 
 ```json
 "extra": {
@@ -165,11 +168,22 @@ The package declares its integration points in `composer.json` under `extra.prad
 }
 ```
 
-- `config/classes.json` maps the short Prado class names (`TRpcService`, `TXmlRpcClient`, …) to their fully-qualified names, so application configurations may reference `class="TRpcService"` as they did when the classes shipped with the framework. Classes are also autoloadable directly by their PSR-4 FQN without the map.
-- `config/messages.txt` holds the `rpc*` exception message codes, registered system-wide via `TException::addMessageFile()`.
-
-Both load for any application that installs the package; no bootstrap module is required.
+`config/classes.json` maps the short class names (`TRpcService`, `TXmlRpcClient`, and so on) to their fully-qualified names, so application configurations can keep writing `class="TRpcService"` exactly as they did when the classes shipped with the framework. The fully-qualified names work too, through plain PSR-4 autoloading. `config/messages.txt` supplies the `rpc*` exception message texts, registered through `TException::addMessageFile()`. Both are picked up automatically by any application that installs the package.
 
 ## History
 
-These classes originated in the PRADO framework (`Prado\Web\Services` RPC service since PRADO 3.2) and were extracted into this extension for PRADO 4.4. The namespaces are unchanged, so existing service configurations and client code continue to work after adding the package. See the [migration guide](docs/migration.md).
+These classes have been part of PRADO for a long time. They landed in the framework on March 27, 2010 (commit `25da68e7`, "added TRpcClient and TRpcServer - fixing #180") as two files: `framework/Web/Services/TRpcService.php` carried the whole server side — `TRpcService`, `TRpcServer`, `TRpcException`, `TRpcApiProvider`, `TRpcProtocol`, `TJsonRpcProtocol`, and `TXmlRpcProtocol` — while `framework/Util/TRpcClient.php` held the clients: `TRpcClient`, `TJsonRpcClient`, `TXmlRpcClient`, and the two client exceptions. The first stable release to ship them was PRADO 3.2.0 in June 2012, which is why the extracted classes carry `@since 3.2.0`. The files were split one class per file in January 2015 (first released in 4.0.0), and in June 2026 the classes moved out of the framework into this repository for PRADO 4.4 (framework commit `54a8def7`).
+
+Two classes are new here: `TXmlRpcCodec` and `TXmlRpcBase64` (`@since 4.4.0`) replace the PECL `xmlrpc` extension the framework versions depended on. Everything else keeps its original namespace, so existing service configurations and client code work unchanged — see the [migration guide](docs/migration.md).
+
+## Versioning and compatibility
+
+The package version follows the PRADO framework's `main` branch, currently **4.4.0**; there is no independent 1.x line. Within a point release, changes stay backward compatible: the public API matches what shipped in the framework, so migrating applications don't need code changes.
+
+## Contributing
+
+Issues and pull requests are welcome. Before submitting, please run the full check chain — syntax, code style, static analysis, and the unit tests — as described under [development setup](#for-development), and include tests for new code: the happy path, the edge cases, and the failure modes.
+
+## License
+
+BSD 3-Clause, the same license as the PRADO framework. See [LICENSE](LICENSE).

@@ -1,6 +1,6 @@
 # prado-rpc — Minimum Viable Context
 
-Composer extension `pradosoft/prado-rpc` · version `1.0.0` · PHP 8.1+ · PSR-4 `Prado\` → `src`. Adds JSON-RPC (1.0/2.0) and XML-RPC to PRADO 4.4 as a server service and a client library. Extracted from the framework; namespaces unchanged.
+Composer extension `pradosoft/prado-rpc` · version `4.4.0` (tracks the PRADO `main` dev branch version) · PHP 8.1+ · PSR-4 `Prado\` → `src`. Adds JSON-RPC (1.0/2.0) and XML-RPC to PRADO 4.4 as a server service and a client library. Extracted from the framework; namespaces unchanged.
 
 **Integration** is declarative via `composer.json` `extra.prado`: `class-map` → `config/classes.json` (short name → FQN) and `error-messages` → `config/messages.txt` (`rpc*` codes). No bootstrap module.
 

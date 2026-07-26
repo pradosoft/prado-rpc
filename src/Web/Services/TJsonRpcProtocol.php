@@ -4,7 +4,7 @@
  * @author Robin J. Rogge <rrogge@bigpoint.net>
  * @link https://github.com/pradosoft/prado-rpc
  * @license https://github.com/pradosoft/prado/blob/master/LICENSE
- * @since 1.0.0
+ * @since 3.2.0
  */
 
 namespace Prado\Web\Services;
@@ -24,7 +24,7 @@ use Prado\Web\Javascripts\TJavaScript;
  *
  * @author Robin J. Rogge <rrogge@bigpoint.net>
  * @author Fabio Bas <ctrlaltca@gmail.com>
- * @since 1.0.0
+ * @since 3.2.0
  */
 class TJsonRpcProtocol extends TRpcProtocol
 {

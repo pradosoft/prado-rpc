@@ -5,7 +5,7 @@
 
 ## Purpose
 
-JSON-RPC and XML-RPC for the PRADO framework (4.4+), as a server-side web service and a client library. Extracted from the framework (`Prado\Web\Services` RPC, since PRADO 3.2) into a standalone composer extension for PRADO 4.4. Version **1.0.0**.
+JSON-RPC and XML-RPC for the PRADO framework (4.4+), as a server-side web service and a client library. Extracted from the framework (`Prado\Web\Services` RPC, since PRADO 3.2) into a standalone composer extension for PRADO 4.4. Version **4.4.0** (tracks the PRADO `main` dev branch version).
 
 ## Layout
 
