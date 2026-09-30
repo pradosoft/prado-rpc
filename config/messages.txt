@@ -1,1 +1,12 @@
 rpcclient_unsupported_handler			= RPC client type '{0}' is not supported; valid types are 'json' and 'xml'.
+rpcclient_unsupported_version			= JSON-RPC version '{0}' is not supported; valid versions are '1.0' and '2.0'.
+rpcservice_apiprovider_required			= RPC API provider '{0}' requires a 'class' property.
+rpcservice_apiprovider_invalid			= RPC API provider class '{0}' of provider '{1}' must extend Prado\Web\Services\TRpcApiProvider.
+rpcservice_rpcserver_invalid			= RPC server class '{0}' of provider '{1}' must be Prado\Web\Services\TRpcServer or extend it.
+rpcservice_apiproviderid_required		= Each RPC API provider requires a non-empty id.
+rpcservice_apiproviderid_duplicated		= RPC API provider id '{0}' is already defined.
+rpcservice_apiproviderid_missing		= The RPC request does not name an API provider.
+rpcservice_apiprovider_unknown			= RPC API provider '{0}' is not defined.
+rpcservice_method_not_post				= RPC requests must use HTTP POST; '{0}' was received.
+rpcservice_content_type_required		= RPC requests require a Content-Type header.
+rpcservice_content_type_unsupported		= RPC Content-Type '{0}' is not supported.

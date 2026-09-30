@@ -9,6 +9,7 @@
 
 namespace Prado\Web\Services;
 
+use Prado\Collections\TMap;
 use Prado\Exceptions\TConfigurationException;
 use Prado\Exceptions\THttpException;
 use Prado\Prado;
@@ -57,7 +58,10 @@ use Prado\Xml\TXmlElement;
  * ```
  *
  * Each `<rpcapi>` element requires an `id` attribute and a `class` in dot-notation or
- * namespace format. On match, the class is instantiated to handle the request.
+ * namespace format. In PHP configuration, each key of `apis` is the provider id. The
+ * optional `server` names a {@see \Prado\Web\Services\TRpcServer} subclass. Other
+ * properties are set on the provider. On match, the class is instantiated to handle
+ * the request.
  *
  * @author Robin J. Rogge <rrogge@bigpoint.net>
  * @since 3.2.0
@@ -99,12 +103,12 @@ class TRpcService extends \Prado\TService
 		$_properties = clone $this->apiProviders[$providerId];
 
 		if (($_providerClass = $_properties->remove('class')) === null) {
-			throw new TConfigurationException('rpcservice_apiprovider_required');
+			throw new TConfigurationException('rpcservice_apiprovider_required', $providerId);
 		}
 
 		$_providerClassName = Prado::usingClass($_providerClass);
 		if (!is_string($_providerClassName) || !is_subclass_of($_providerClassName, self::BASE_API_PROVIDER)) {
-			throw new TConfigurationException('rpcservice_apiprovider_invalid', $_providerClass);
+			throw new TConfigurationException('rpcservice_apiprovider_invalid', $_providerClass, $providerId);
 		}
 
 		if (($_rpcServerClass = $_properties->remove('server')) === null) {
@@ -113,7 +117,7 @@ class TRpcService extends \Prado\TService
 
 		$_rpcServerClassName = Prado::usingClass($_rpcServerClass);
 		if (!is_string($_rpcServerClassName) || ($_rpcServerClassName !== self::BASE_RPC_SERVER && !is_subclass_of($_rpcServerClassName, self::BASE_RPC_SERVER))) {
-			throw new TConfigurationException('rpcservice_rpcserver_invalid', $_rpcServerClass);
+			throw new TConfigurationException('rpcservice_rpcserver_invalid', $_rpcServerClass, $providerId);
 		}
 
 		$_apiProvider = Prado::createComponent($_providerClassName, Prado::createComponent($_rpcServerClassName, $protocolHandler));
@@ -137,27 +141,46 @@ class TRpcService extends \Prado\TService
 	}
 
 	/**
-	 * Loads the service configuration.
-	 * @param mixed $config XML element or null/array for PHP-style configuration
+	 * Loads the API providers from the service configuration.
+	 * XML configuration declares each provider as an `<rpcapi>` element with an `id` attribute.
+	 * PHP configuration declares each provider under the `apis` key, keyed by provider id.
+	 * @param null|array|\Prado\Xml\TXmlElement $config the service configuration
+	 * @throws TConfigurationException when a provider id is missing, empty, or duplicated.
 	 */
 	public function loadConfig($config)
 	{
-		if (!$config instanceof TXmlElement) {
-			return;
-		}
-		foreach ($config->getElementsByTagName('rpcapi') as $_apiProviderXml) {
-			$_properties = $_apiProviderXml->getAttributes();
-
-			if (($_id = $_properties->remove('id')) === null || $_id == "") {
-				throw new TConfigurationException('rpcservice_apiproviderid_required');
+		if (is_array($config)) {
+			foreach ($config['apis'] ?? [] as $_id => $_apiProvider) {
+				$_properties = new TMap(is_array($_apiProvider) ? $_apiProvider : []);
+				$_properties->remove('id');
+				$this->addApiProvider(is_string($_id) ? $_id : null, $_properties);
 			}
-
-			if (isset($this->apiProviders[$_id])) {
-				throw new TConfigurationException('rpcservice_apiproviderid_duplicated');
+		} elseif ($config instanceof TXmlElement) {
+			foreach ($config->getElementsByTagName('rpcapi') as $_apiProviderXml) {
+				$_properties = $_apiProviderXml->getAttributes();
+				$this->addApiProvider($_properties->remove('id'), $_properties);
 			}
-
-			$this->apiProviders[$_id] = $_properties;
 		}
+	}
+
+	/**
+	 * Registers the configured properties of an API provider under its id.
+	 * @param ?string $id the provider id
+	 * @param TMap $properties the provider properties, including `class` and the optional `server`
+	 * @throws TConfigurationException when the id is missing, empty, or already registered.
+	 * @since 4.4.0
+	 */
+	protected function addApiProvider($id, TMap $properties)
+	{
+		if ($id === null || $id == "") {
+			throw new TConfigurationException('rpcservice_apiproviderid_required');
+		}
+
+		if (isset($this->apiProviders[$id])) {
+			throw new TConfigurationException('rpcservice_apiproviderid_duplicated', $id);
+		}
+
+		$this->apiProviders[$id] = $properties;
 	}
 
 	/**
