@@ -20,7 +20,7 @@ If you're contributing, the per-class working notes under [`agents/`](agents/IND
 
 ## Requirements
 
-You'll need PHP 8.1 or newer with the `simplexml` and `dom` extensions — both are part of stock PHP builds. The XML-RPC codec uses `simplexml` for decoding, and `dom` handles XML request parsing. The package runs inside a PRADO 4.4+ application, which supplies the framework itself; `pradosoft/prado` is only a dev dependency of this package.
+You'll need a PHP version actually supported by the [PRADO PHP Framework](https://github.com/pradosoft/prado) with the `simplexml` and `dom` extensions — both are part of stock PHP builds. The XML-RPC codec uses `simplexml` for decoding, and `dom` handles XML request parsing. The package runs inside a PRADO 4.4+ application, which supplies the framework itself; `pradosoft/prado` is only a dev dependency of this package.
 
 ## Installation
 
