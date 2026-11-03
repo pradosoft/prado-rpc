@@ -15,7 +15,7 @@
 ## Code Style Guidelines
 
 ### PHP Coding Standards
-- PHP 8.1 minimum (CI: 8.1, 8.2, 8.3). PSR-12 via php-cs-fixer.
+- PHP 8.1 minimum (CI: 8.2, 8.3, 8.4, 8.5; the `pradosoft/prado` dev dependency requires 8.2). PSR-12 via php-cs-fixer.
 - Indentation: **1 tab**, never spaces. Line endings: Unix (`\n`). All files begin with `<?php`.
 - `if` always has a `{}` block (no single-line bodies).
 - Use `?` for single nullable types and in doc blocks.

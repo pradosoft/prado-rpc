@@ -80,7 +80,7 @@ Remote methods are invoked through `__call`, so a client call reads like a nativ
 - **`extra.prado` in `composer.json`** declares the two integration points that PRADO's `TApplicationConfiguration` reads from every installed extension:
   - `class-map` → `config/classes.json`: maps short Prado names (`TRpcService`, `TXmlRpcClient`, …) to FQNs so app configs may reference `class="TRpcService"`. Add an entry here whenever a new public class is added.
   - `error-messages` → `config/messages.txt`: the `rpc*` exception message codes. There is **no** bootstrap module; both files load system-wide for any application that installs the package.
-- **Error codes** are `rpc*` keys in `config/messages.txt`. The framework `messages.txt` is not used. New codes describe the failure; `{0}`, `{1}` are positional parameters.
+- **Error codes** are `rpc*` keys in `config/messages.txt`. The framework `messages.txt` is not used. New codes describe the failure; `{0}`, `{1}` are positional parameters. Entries are ICU MessageFormat patterns: an apostrophe next to a brace is doubled, so a quoted placeholder is `''{0}''`.
 - **cs-fixer = tabs** (`@PSR12` + `setIndent("\t")`). If cs-fixer suddenly wants to convert tabs → spaces across *every* file, `.php-cs-fixer.dist.php` has been clobbered by a php-cs-fixer scaffold (the `@auto` default); restore the tab-based config (it matches the sibling extensions).
 - **`if` statements** always use a block (`{}`), never a single-line body.
 - **`@since`** records the version that introduced the class or method: the twelve classes extracted from the framework carry `@since 3.2.0` (verified against the framework git history — added 2010-03-27 in commit `25da68e7`, first released in PRADO 3.2.0, and tagged `@since 3.2` in the framework docblocks); `TXmlRpcCodec` and `TXmlRpcBase64` are new in this package and carry `@since 4.4.0`. New classes/methods use `@since 4.4.0`, the PRADO framework version the package targets, independent of the package release number (see "What This Is"); omit the method tag when it matches the class tag.
@@ -95,7 +95,7 @@ Remote methods are invoked through `__call`, so a client call reads like a nativ
 
 ## Code Style
 
-- Indentation: **tabs** (not spaces). Line endings: Unix (`\n`). PHP minimum: 8.1 (CI tests 8.1, 8.2, 8.3). PSR-12 enforced via php-cs-fixer. Use `?` for single nullable types and in doc blocks.
+- Indentation: **tabs** (not spaces). Line endings: Unix (`\n`). PHP minimum: 8.1 (CI tests 8.2, 8.3, 8.4, 8.5; the `pradosoft/prado` dev dependency requires 8.2). PSR-12 enforced via php-cs-fixer. Use `?` for single nullable types and in doc blocks.
 
 ### Documentation Style (enforced)
 

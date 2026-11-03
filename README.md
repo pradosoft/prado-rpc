@@ -74,7 +74,7 @@ vendor/bin/php-cs-fixer fix --dry-run src/           # code style
 vendor/bin/phpstan analyse src/ --memory-limit=512M  # static analysis
 ```
 
-CI ([`.github/workflows/prado-rpc.yml`](.github/workflows/prado-rpc.yml)) runs those same checks on PHP 8.1, 8.2, and 8.3 for every push and pull request. Code style is PSR-12 with tabs, enforced by `.php-cs-fixer.dist.php`.
+CI ([`.github/workflows/prado-rpc.yml`](.github/workflows/prado-rpc.yml)) runs those same checks on PHP 8.2, 8.3, 8.4, and 8.5 for every push and pull request. Code style is PSR-12 with tabs, enforced by `.php-cs-fixer.dist.php`.
 
 ## Serving an API
 

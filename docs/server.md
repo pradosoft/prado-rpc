@@ -112,7 +112,7 @@ class AuditingRpcServer extends TRpcServer
 
 ## How a request is handled
 
-1. `TRpcService::run()` resolves the provider id, checks the method is POST, and reads the `Content-Type`.
+1. `TRpcService::run()` refuses a request without a valid CSRF token when `EnableCsrfValidation` is on (off by default), then resolves the provider id, checks the method is POST, and reads the `Content-Type`.
 2. The `Content-Type` selects `TJsonRpcProtocol` or `TXmlRpcProtocol`; an unsupported type returns HTTP 415.
 3. The provider is instantiated with a `TRpcServer`, which registers every method from `registerMethods()`.
 4. `TRpcServer::processRequest()` reads the request body and hands it to the protocol.

@@ -48,6 +48,7 @@ Per-provider `server="…"` overrides the default `TRpcServer`.
 
 ## Dispatch rules
 
+- `EnableCsrfValidation` (inherited from `TService`, off by default) on and a POST without a valid CSRF token → `THttpException` 400 (`service_csrf_token_invalid`), via `ensureCsrfToken()` at the start of `run()`.
 - Non-POST request → `THttpException` 405.
 - Missing/unknown provider id → 400 / 404.
 - Missing `Content-Type` → 415; unsupported type → 415.
@@ -57,7 +58,7 @@ Per-provider `server="…"` overrides the default `TRpcServer`.
 
 - `$protocolHandlers` is FQN-keyed, so protocol instantiation works under pure PSR-4; the class map is not required at runtime.
 - Provider/server class names come from app config and resolve through `Prado::usingClass()` (dot, short, or FQN).
-- Error codes are `rpcservice_*` in `config/messages.txt`.
+- Error codes are `rpcservice_*` in `config/messages.txt`. Entries are ICU MessageFormat patterns: a quoted placeholder is written `''{0}''`.
 
 ## See Also
 - [`TRpcServer`](./TRpcServer.md) · [`TRpcApiProvider`](./TRpcApiProvider.md) · [`TRpcProtocol`](./TRpcProtocol.md)

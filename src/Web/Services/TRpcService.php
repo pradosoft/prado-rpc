@@ -63,6 +63,9 @@ use Prado\Xml\TXmlElement;
  * properties are set on the provider. On match, the class is instantiated to handle
  * the request.
  *
+ * With {@see \Prado\TService::setEnableCsrfValidation() EnableCsrfValidation} on, a
+ * request without a valid CSRF token is refused with HTTP 400. It is off by default.
+ *
  * @author Robin J. Rogge <rrogge@bigpoint.net>
  * @since 3.2.0
  **/
@@ -185,10 +188,11 @@ class TRpcService extends \Prado\TService
 
 	/**
 	 * Runs the service.
-	 * @throws THttpException when the provider id is missing, unknown, the HTTP method is not POST, or the content-type is unsupported.
+	 * @throws THttpException when the CSRF token is invalid, the provider id is missing or unknown, the HTTP method is not POST, or the content-type is unsupported.
 	 */
 	public function run()
 	{
+		$this->ensureCsrfToken();
 		$_request = $this->getRequest();
 
 		if (($_providerId = $_request->getServiceParameter()) == "") {
